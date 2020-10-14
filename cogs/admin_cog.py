@@ -16,10 +16,9 @@ class AdminCog(commands.Cog):
         return False
 
     @commands.command(aliases=["e"])
-    async def echo(self, ctx: commands.Context, channel: discord.TextChannel = None, *, message):
-        if not channel:
-            channel = ctx.channel
-        await channel.send(message)
+    async def echo(self, ctx: commands.Context, *, message):
+        await ctx.send(message)
+        await ctx.message.delete()
     
     @commands.command()
     async def addcure(self, ctx: commands.Context, *, cure):
