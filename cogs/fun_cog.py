@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+from random import choice
 
 import discord
 from discord.ext import commands
@@ -11,8 +12,19 @@ class FunCog(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def command(self, ctx: commands.Context):
-        pass
+    async def precure(self, ctx: commands.Context):
+        """
+        I'll give you a random Cure!
+        """
+        with open("lists/precure.txt", "r") as f:
+            cures = f.readlines()
+        await ctx.send(choice(cures))
+    
+    @commands.command()
+    async def hug(self, ctx: commands.Context, people: commands.Greedy[discord.Member], *, reason: str = "I love them"):
+        tohug = [member.mention for member in people]
+        msg = ", ".join(tohug)
+        await ctx.send(f"*hugs {msg} because {reason}*")
 
 def setup(bot: 'KurumiBot'):
     bot.add_cog(FunCog(bot))
