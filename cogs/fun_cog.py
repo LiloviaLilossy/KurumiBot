@@ -28,6 +28,12 @@ class FunCog(commands.Cog):
     
     @commands.command()
     async def pat(self, ctx: commands.Context, people: commands.Greedy[discord.Member], *, reason: str = "they deserve it"):
+        owner = ctx.guild.get_member(self.bot.owner_id)
+        if owner in people:
+            if len(people) > 1:
+                people.remove(owner)
+            else:
+                return await ctx.send("Lilo said she's not pattable.")
         tohug = [member.mention for member in people]
         msg = ", ".join(tohug)
         await ctx.send(f"*pat-pat {msg} because {reason}*")
