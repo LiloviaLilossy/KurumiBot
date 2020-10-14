@@ -25,6 +25,12 @@ class FunCog(commands.Cog):
         tohug = [member.mention for member in people]
         msg = ", ".join(tohug)
         await ctx.send(f"*hugs {msg} because {reason}*")
+    
+    @commands.command()
+    async def pat(self, ctx: commands.Context, people: commands.Greedy[discord.Member], *, reason: str = "they deserve it"):
+        tohug = [member.mention for member in people]
+        msg = ", ".join(tohug)
+        await ctx.send(f"*pat-pat {msg} because {reason}*")
 
 def setup(bot: 'KurumiBot'):
     bot.add_cog(FunCog(bot))
