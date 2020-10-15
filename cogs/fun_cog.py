@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 class FunCog(commands.Cog):
     def __init__(self, bot: 'KurumiBot'):
         self.bot = bot
+        self.allowed = [276241808584081410, 154328221154803712, 176019364234002443]
 
     @commands.command()
     async def precure(self, ctx: commands.Context):
@@ -30,7 +31,8 @@ class FunCog(commands.Cog):
     async def pat(self, ctx: commands.Context, people: commands.Greedy[discord.Member], *, reason: str = "they deserve it"):
         owner = ctx.guild.get_member(self.bot.owner_id)
         if owner in people:
-            if len(people) > 1:
+            if ctx.author.id in self.allowed: pass
+            elif len(people) > 1:
                 people.remove(owner)
             else:
                 return await ctx.send("Lilo said she's not pattable.")
