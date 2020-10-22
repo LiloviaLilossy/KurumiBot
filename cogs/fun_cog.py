@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 
 class FunCog(commands.Cog):
     def __init__(self, bot: 'KurumiBot'):
+        bot.is_huggable = True
+        bot.is_pattable = True
         self.bot = bot
         self.allowed = [276241808584081410, 154328221154803712, 176019364234002443]
 
@@ -23,6 +25,13 @@ class FunCog(commands.Cog):
     
     @commands.command()
     async def hug(self, ctx: commands.Context, people: commands.Greedy[discord.Member], *, reason: str = "I love them"):
+        owner = ctx.guild.get_member(self.bot.owner_id)
+        if owner in people and not ctx.bot.is_huggable:
+            if ctx.author.id in self.allowed: pass
+            elif len(people) > 1:
+                people.remove(owner)
+            else:
+                return await ctx.send("Lilo said she's not huggable.")
         tohug = [member.mention for member in people]
         msg = ", ".join(tohug)
         await ctx.send(f"*hugs {msg} because {reason}*")
@@ -30,7 +39,7 @@ class FunCog(commands.Cog):
     @commands.command()
     async def pat(self, ctx: commands.Context, people: commands.Greedy[discord.Member], *, reason: str = "they deserve it"):
         owner = ctx.guild.get_member(self.bot.owner_id)
-        if owner in people:
+        if owner in people and not ctx.bot.is_pattable:
             if ctx.author.id in self.allowed: pass
             elif len(people) > 1:
                 people.remove(owner)

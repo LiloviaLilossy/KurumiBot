@@ -56,7 +56,7 @@ class KurumiBot(commands.Bot):
 cogs = config["cogs"]
 
 if __name__ == "__main__":
-    bot = KurumiBot()
+    bot = KurumiBot(owner_id=321566831670198272)
 
     for cog in cogs:
         bot.load_extension(cog)
