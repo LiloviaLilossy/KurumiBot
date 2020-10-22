@@ -6,14 +6,17 @@ from typing import List, Mapping, Optional
 import discord
 from discord.ext import commands
 
-#import helpers.fuzzle as fuzzle
+# import helpers.fuzzle as fuzzle
 
 MAINTAINER = "Dan6erbond#2259"
 
 
 class HelpCommand(commands.HelpCommand):
-
-    def __init__(self, embed_color: discord.Colour = discord.Colour(0).from_rgb(64, 153, 130), **options):
+    def __init__(
+        self,
+        embed_color: discord.Colour = discord.Colour(0).from_rgb(64, 153, 130),
+        **options,
+    ):
         self._embed_color = embed_color
         super().__init__(**options)
 
@@ -27,26 +30,33 @@ class HelpCommand(commands.HelpCommand):
             embed = discord.Embed(colour=self._embed_color)
             embed.set_footer(
                 text=f"Help command by {MAINTAINER}",
-                icon_url=self.context.bot.user.avatar_url)
+                icon_url=self.context.bot.user.avatar_url,
+            )
             embed.timestamp = datetime.utcnow()
 
             return embed
 
     def get_cmd_string(self, cmd: commands.Command):
-        params = [f"[{k}{' (optional)' if v.default != Parameter.empty else ''}]" for k,
-                  v in cmd.clean_params.items()]
+        params = [
+            f"[{k}{' (optional)' if v.default != Parameter.empty else ''}]"
+            for k, v in cmd.clean_params.items()
+        ]
         return f"{self.context.bot.command_prefix}{cmd.name} {' '.join(params)}"
 
-    async def send_bot_help(self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]):
+    async def send_bot_help(
+        self, mapping: Mapping[Optional[commands.Cog], List[commands.Command]]
+    ):
         embeds = []
 
         for cog in mapping:
             embed = self.embed
 
             for cmd in mapping[cog]:
-                embed.add_field(name=f"`{self.get_cmd_string(cmd)}`",
-                                value=cmd.brief if cmd.brief else cmd.help,
-                                inline=False)
+                embed.add_field(
+                    name=f"`{self.get_cmd_string(cmd)}`",
+                    value=cmd.brief if cmd.brief else cmd.help,
+                    inline=False,
+                )
 
             if not cog:
                 embed.set_author(name=f"General Commands")
@@ -58,7 +68,10 @@ class HelpCommand(commands.HelpCommand):
                 embeds.append(embed)
 
         for index, embed in enumerate(embeds, start=1):
-            embed.set_footer(text=f"Page {index} of {len(embeds)}", icon_url=self.context.bot.user.avatar_url)
+            embed.set_footer(
+                text=f"Page {index} of {len(embeds)}",
+                icon_url=self.context.bot.user.avatar_url,
+            )
 
         if not embeds:
             return
@@ -76,9 +89,11 @@ class HelpCommand(commands.HelpCommand):
         while seconds < MAX_TIME:
             try:
                 time_started = datetime.now()
-                reaction = await self.context.bot.wait_for("reaction_add",
-                                                           check=lambda r, u: u.id == self.context.author.id and r.message.id == msg.id,
-                                                           timeout=MAX_TIME - seconds)
+                reaction = await self.context.bot.wait_for(
+                    "reaction_add",
+                    check=lambda r, u: u.id == self.context.author.id and r.message.id == msg.id,
+                    timeout=MAX_TIME - seconds,
+                )
 
                 await msg.remove_reaction(reaction[0], reaction[1])
 
@@ -103,9 +118,11 @@ class HelpCommand(commands.HelpCommand):
         embed.description = "Use `!help [command]` for more information."
 
         for cmd in cog.get_commands():
-            embed.add_field(name=f"`{self.get_cmd_string(cmd)}`",
-                            value=cmd.brief if cmd.brief else cmd.help,
-                            inline=False)
+            embed.add_field(
+                name=f"`{self.get_cmd_string(cmd)}`",
+                value=cmd.brief if cmd.brief else cmd.help,
+                inline=False,
+            )
 
         await self.get_destination().send(embed=embed)
 
@@ -116,13 +133,15 @@ class HelpCommand(commands.HelpCommand):
     async def send_command_help(self, command: commands.Command):
         embed = self.embed
 
-        embed.add_field(name=f"`{self.get_cmd_string(command)}`",
-                        value=command.help if command.help else command.brief,
-                        inline=False)
+        embed.add_field(
+            name=f"`{self.get_cmd_string(command)}`",
+            value=command.help if command.help else command.brief,
+            inline=False,
+        )
 
         await self.get_destination().send(embed=embed)
 
-    #async def command_not_found(self, string):
+    # async def command_not_found(self, string):
     #    cmds = [{"key": cmd.name, "tags": cmd.aliases, "cmd": cmd} for cmd in self.context.bot.commands]
 
     #    results = fuzzle.find(cmds, string, 0.02)

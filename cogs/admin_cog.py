@@ -6,10 +6,11 @@ from discord.ext import commands
 if TYPE_CHECKING:
     from kurumi_bot import KurumiBot
 
+
 class AdminCog(commands.Cog):
-    def __init__(self, bot: 'KurumiBot'):
+    def __init__(self, bot: "KurumiBot"):
         self.bot = bot
-    
+
     async def cog_check(self, ctx):
         if ctx.author.id == self.bot.owner_id:
             return True
@@ -19,7 +20,7 @@ class AdminCog(commands.Cog):
     async def echo(self, ctx: commands.Context, *, message):
         await ctx.send(message)
         await ctx.message.delete()
-    
+
     @commands.command()
     async def addcure(self, ctx: commands.Context, *, cure):
         with open("lists/precure.txt", "a") as f:
@@ -27,5 +28,6 @@ class AdminCog(commands.Cog):
             f.write(cure)
         await ctx.send("Done!")
 
-def setup(bot: 'KurumiBot'):
+
+def setup(bot: "KurumiBot"):
     bot.add_cog(AdminCog(bot))

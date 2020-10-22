@@ -140,3 +140,5 @@ cython_debug/
 # Bot config files
 discord.yaml
 lists/
+
+.vscode/

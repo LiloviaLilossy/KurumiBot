@@ -7,8 +7,9 @@ from cmds.help_cmd import HelpCommand
 if TYPE_CHECKING:
     from kurumi_bot import KurumiBot
 
+
 class HelpCog(commands.Cog):
-    def __init__(self, bot: 'KurumiBot'):
+    def __init__(self, bot: "KurumiBot"):
         self.bot = bot
         self._original_help_command = bot.help_command
         bot.help_command = HelpCommand()
@@ -17,5 +18,6 @@ class HelpCog(commands.Cog):
     def cog_unload(self):
         self.bot.help_command = self._original_help_command
 
-def setup(bot: 'KurumiBot'):
+
+def setup(bot: "KurumiBot"):
     bot.add_cog(HelpCog(bot))
